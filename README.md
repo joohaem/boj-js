@@ -1,5 +1,13 @@
 # BOJ with JS
 [ID: gyhn123](https://www.acmicpc.net/user/gyhn123)
+- [x] 입출력
+- [ ] Dynamic Programming 
+- [ ] etc..
+- [ ] 그래프
+- [ ] 이분탐색/삼분탐색
+- [ ] 분할정복
+- [ ] 그리디 알고리즘
+- [ ] 완전탐색
 
 ## use strict
 [MDN Web Docs](https://developer.mozilla.org/ko/docs/Web/JavaScript/Reference/Strict_mode)
@@ -16,12 +24,15 @@
 ```javascript
 const fs = require("fs");
 const filePath = process.platform === 'linux' ? '/dev/stdin' : './input.txt';
-const input = fs.readFileSync(filePath).toString().split("\n");
+const [T, ...input] = fs.readFileSync(filePath).toString().split("\n");
 ```
 
 ## 자료형 변환
 표현 별 속도차이 미미함 (`new` Object는 X)
 - `Number()`
+- `.parseInt()`
+- `+()`
+
 - `String()`
 - `Boolean()`
 
