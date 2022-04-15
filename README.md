@@ -34,6 +34,10 @@ const input = fs.readFileSync(filePath).toString().split("\n");
 
 - `const numbers = line.split(" ").map(Number);` : string[] -> number[]
 
+## 반복문
+
+`forEach`: 배열 / `for...in`: 객체 / `for...of`: iterable 객체(문자열까지)
+
 ## 다차원 배열 선언
 
 ```javascript
