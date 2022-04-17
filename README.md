@@ -38,6 +38,19 @@ const input = fs.readFileSync(filePath).toString().split("\n");
 
 `forEach`: 배열 / `for...in`: 객체 / `for...of`: iterable 객체(문자열까지)
 
+## sort() 정렬
+
+- sort() 메소드는 문자열 기준으로 정렬되므로, 인자로 비교함수가 필수적이다
+- retrun 값이 음수이면, 둘의 순서가 바뀐다
+- 이미 정렬되어 있는 배열의 역순 정렬은 `.reverse()`가 가장 좋다
+
+```javascript
+const arr = [5, 1, 8, 11, 2];
+arr.sort(); // 1 11 2 5 8
+arr.sort((a, b) => a - b); // 1 2 5 8 11
+arr.sort((a, b) => b - a); // 11 8 5 2 1
+```
+
 ## 다차원 배열 선언
 
 ```javascript
