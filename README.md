@@ -1,6 +1,13 @@
 # BOJ with JS
 
-[ID: gyhn123](https://www.acmicpc.net/user/gyhn123)
+- [ID: gyhn123](https://www.acmicpc.net/user/gyhn123)
+
+  [![Solved.ac
+Profile](http://mazassumnida.wtf/api/v2/generate_badge?boj=gyhn123)](https://solved.ac/gyhn123)
+
+- [SOPT ALGORITHMTA study](https://github.com/algorithmta-js)
+
+<br />
 
 ## use strict
 
@@ -14,6 +21,8 @@
 6. 최신 문법 금지
 7. ...
 
+<br />
+
 ## Input
 
 `readline` 보다는 `fs` 사용
@@ -23,6 +32,8 @@ const fs = require("fs");
 const filePath = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
 const input = fs.readFileSync(filePath).toString().split("\n");
 ```
+
+<br />
 
 ## 자료형 변환
 
@@ -34,9 +45,13 @@ const input = fs.readFileSync(filePath).toString().split("\n");
 
 - `const numbers = line.split(" ").map(Number);` : string[] -> number[]
 
+<br />
+
 ## 반복문
 
 `forEach`: 배열 / `for...in`: 객체 / `for...of`: iterable 객체(문자열까지)
+
+<br />
 
 ## sort() 정렬
 
@@ -50,6 +65,8 @@ arr.sort(); // 1 11 2 5 8
 arr.sort((a, b) => a - b); // 1 2 5 8 11
 arr.sort((a, b) => b - a); // 11 8 5 2 1
 ```
+
+<br />
 
 ## 다차원 배열 선언
 
@@ -67,9 +84,13 @@ for (let i = 0; i < 21; i++) {
 }
 ```
 
+<br />
+
 ## Math
 
 - `Math.max(a, b)`
+
+<br />
 
 ## Output
 

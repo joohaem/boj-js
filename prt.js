@@ -2,23 +2,30 @@
 
 const fs = require("fs");
 const filePath = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
-const [N, ...input] = fs.readFileSync(filePath).toString().trim().split("\n");
+const [N, ...inputs] = fs.readFileSync(filePath).toString().trim().split("\n");
 
-const inputNum = input.map((n) => +n);
-let max = 0;
-let arr = [];
+let totalArr = [];
+let pivot = -1000000000;
+let outputCnt = 0;
 
-for (let i = 0; i < N; i++) {
-  const currentNum = inputNum[i];
-  arr.push(currentNum);
-}
+inputs.forEach((line) => {
+  const stringLine = line.split(" ");
+  const numberLine = stringLine.map((a) => +a);
+  totalArr.push(numberLine);
+});
 
-arr.sort((a, b) => a - b);
+totalArr.sort((a, b) => {
+  if (a[0] < b[0]) return -1;
+});
 
-for (let i = 0; i < N; i++) {
-  if (max < arr[i] * (N - i)) {
-    max = arr[i] * (N - i);
+totalArr.forEach((line) => {
+  if (pivot <= line[0]) {
+    outputCnt += line[1] - line[0];
+    pivot = line[1];
+  } else if (pivot < line[1]) {
+    outputCnt += line[1] - pivot;
+    pivot = line[1];
   }
-}
+});
 
-console.log(max);
+console.log(outputCnt);
