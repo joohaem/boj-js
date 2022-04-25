@@ -30,7 +30,7 @@ Profile](http://mazassumnida.wtf/api/v2/generate_badge?boj=gyhn123)](https://sol
 ```javascript
 const fs = require("fs");
 const filePath = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
-const input = fs.readFileSync(filePath).toString().split("\n");
+const [N, cards, M, nums] = fs.readFileSync(filePath).toString().split("\n");
 ```
 
 <br />
