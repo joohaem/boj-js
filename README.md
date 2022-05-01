@@ -30,7 +30,11 @@ Profile](http://mazassumnida.wtf/api/v2/generate_badge?boj=gyhn123)](https://sol
 ```javascript
 const fs = require("fs");
 const filePath = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
-const [N, cards, M, nums] = fs.readFileSync(filePath).toString().split("\n");
+const [N, cards, M, nums] = fs
+  .readFileSync(filePath)
+  .toString()
+  .trim()
+  .split("\n");
 ```
 
 <br />
@@ -55,7 +59,7 @@ const [N, cards, M, nums] = fs.readFileSync(filePath).toString().split("\n");
 
 ## sort() 정렬
 
-- sort() 메소드는 문자열 기준으로 정렬되므로, 인자로 비교함수가 필수적이다
+- sort() 메소드는 **문자열 기준**으로 정렬되므로, 인자로 **비교함수가 필수적**이다
 - retrun 값이 음수이면, 둘의 순서가 바뀐다
 - 이미 정렬되어 있는 배열의 역순 정렬은 `.reverse()`가 가장 좋다
 

@@ -2,42 +2,53 @@
 
 const fs = require("fs");
 const filePath = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
-const inputs = fs.readFileSync(filePath).toString().trim().split("\n");
+const [n, targets, m, ...inputs] = fs
+  .readFileSync(filePath)
+  .toString()
+  .trim()
+  .split("\n");
 
-const N = +inputs[0];
-const cardsCnt = [];
-const cards = inputs[1]
-  .split(" ")
-  .map((num) => {
-    if (isNaN(cardsCnt[+num])) cardsCnt[+num] = 1;
-    else cardsCnt[+num]++;
-    return +num;
-  })
-  .sort((a, b) => a - b);
-const M = +inputs[2];
-const numbers = inputs[3].split(" ").map(Number);
+const [from, to] = targets.split(" ").map(Number);
 
-function binarySearch(targetNum) {
-  let low = 0;
-  let high = cards.length - 1;
+const graph = {};
+const kinship = [];
+for (let i = 1; i <= +n; i++) {
+  graph[i] = [];
+  kinship[i] = -1;
+}
 
-  while (low <= high) {
-    let mid = Math.floor((high + low) / 2);
+inputs.forEach((line) => {
+  const [parent, child] = line.split(" ").map(Number);
+  graph[parent].push(child);
+  graph[child].push(parent);
+});
 
-    if (cards[mid] === targetNum) {
-      return cardsCnt[targetNum];
-    } else if (cards[mid] > targetNum) {
-      high = mid - 1;
-    } else {
-      low = mid + 1;
+// -----------------------------------
+
+function bfs(startNode) {
+  let visitQueue = [];
+  let visited = [];
+
+  visitQueue.push(startNode);
+  kinship[startNode] = 0;
+
+  while (visitQueue.length > 0) {
+    const node = visitQueue.shift();
+    if (node === to) return kinship[node];
+
+    if (!visited.includes(node)) {
+      visited.push(node);
+      visitQueue = [...visitQueue, ...graph[node]];
+
+      graph[node].forEach((nodeInQ) => {
+        if (kinship[nodeInQ] === -1) kinship[nodeInQ] = kinship[node] + 1;
+      });
     }
   }
 
-  return 0;
+  return -1;
 }
 
-const answer = numbers.map((num) => {
-  return binarySearch(num);
-});
+// -----------------------------------
 
-console.log(answer.join("\n"));
+console.log(bfs(from));
