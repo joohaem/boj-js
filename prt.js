@@ -1,54 +1,109 @@
 "use strict";
 
-const fs = require("fs");
-const filePath = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
-const [n, targets, m, ...inputs] = fs
-  .readFileSync(filePath)
-  .toString()
-  .trim()
-  .split("\n");
+class MinHeap {
+  constructor() {
+    this.list = [null];
+  }
 
-const [from, to] = targets.split(" ").map(Number);
+  swap(a, b) {
+    [this.list[a], this.list[b]] = [this.list[b], this.list[a]];
+  }
 
-const graph = {};
-const kinship = [];
-for (let i = 1; i <= +n; i++) {
-  graph[i] = [];
-  kinship[i] = -1;
+  getParent(current) {
+    return this.list[Math.floor(current / 2)];
+  }
+
+  getLeftChildIdx(current) {
+    return current * 2;
+  }
+
+  getRightChildIdx(current) {
+    return current * 2 + 1;
+  }
+
+  bubbleUp() {
+    let pos = this.size() - 1;
+    while (pos >= 1) {
+      const parent = this.getParent(pos);
+      const parentIdx = Math.floor(pos / 2);
+      if (!parent) return;
+
+      if (parent > this.list[pos]) {
+        this.swap(parentIdx, pos);
+        pos = parentIdx;
+      } else return;
+    }
+  }
+
+  bubbleDown() {
+    let pos = 1;
+    while (pos < this.size()) {
+      const leftIdx = this.getLeftChildIdx(pos),
+        rightIdx = this.getRightChildIdx(pos);
+
+      let maxIndex = pos;
+      if (leftIdx < this.size() && this.list[leftIdx] < this.list[maxIndex])
+        maxIndex = leftIdx;
+      if (rightIdx < this.size() && this.list[rightIdx] < this.list[maxIndex])
+        maxIndex = rightIdx;
+
+      if (maxIndex !== pos) {
+        this.swap(maxIndex, pos);
+        pos = maxIndex;
+      } else return;
+    }
+  }
+
+  insert(element) {
+    this.list.push(element);
+    this.bubbleUp();
+  }
+
+  pop() {
+    if (this.size() === 2) return this.list.pop();
+
+    const answer = this.list[1];
+
+    this.list[1] = this.list.pop();
+    this.bubbleDown();
+
+    return answer;
+  }
+
+  size() {
+    return this.list.length;
+  }
+
+  empty() {
+    return this.size() === 1;
+  }
 }
 
-inputs.forEach((line) => {
-  const [parent, child] = line.split(" ").map(Number);
-  graph[parent].push(child);
-  graph[child].push(parent);
+// -----------------------------------
+
+const fs = require("fs");
+const filePath = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
+const [_N, ...inputs] = fs.readFileSync(filePath).toString().trim().split("\n");
+
+const N = +_N;
+
+// -----------------------------------
+
+const myQ = new MinHeap();
+let answer = -1;
+
+const [...nums] = inputs.map((line) => {
+  return line.split(" ").map(Number);
+});
+
+nums.forEach((line) => {
+  for (let num of line) {
+    myQ.insert(num);
+
+    if (myQ.size() > N) answer = myQ.pop();
+  }
 });
 
 // -----------------------------------
 
-function bfs(startNode) {
-  let visitQueue = [];
-  let visited = [];
-
-  visitQueue.push(startNode);
-  kinship[startNode] = 0;
-
-  while (visitQueue.length > 0) {
-    const node = visitQueue.shift();
-    if (node === to) return kinship[node];
-
-    if (!visited.includes(node)) {
-      visited.push(node);
-      visitQueue = [...visitQueue, ...graph[node]];
-
-      graph[node].forEach((nodeInQ) => {
-        if (kinship[nodeInQ] === -1) kinship[nodeInQ] = kinship[node] + 1;
-      });
-    }
-  }
-
-  return -1;
-}
-
-// -----------------------------------
-
-console.log(bfs(from));
+console.log(answer);
