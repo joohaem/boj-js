@@ -75,6 +75,14 @@ arr.sort((a, b) => b - a); // 11 8 5 2 1
 ## 다차원 배열 선언
 
 ```javascript
+const graph = arr.map((num) => num.split(" ").map(Number));
+```
+
+```javascript
+visited = Array.from(Array(N), () => Array(M).fill(false));
+```
+
+```javascript
 let dp = [];
 
 for (let i = 0; i < 21; i++) {
@@ -92,7 +100,7 @@ for (let i = 0; i < 21; i++) {
 
 ## Math
 
-- `Math.max(a, b)`
+- `Math.max(a, b, c, ...)`
 
 <br />
 
