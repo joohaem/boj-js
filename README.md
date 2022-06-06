@@ -7,6 +7,8 @@ Profile](http://mazassumnida.wtf/api/v2/generate_badge?boj=gyhn123)](https://sol
 
 - [SOPT ALGORITHMTA study](https://github.com/algorithmta-js)
 
+- 문제 잘 읽자
+
 <br />
 
 ## use strict
@@ -72,6 +74,21 @@ arr.sort((a, b) => b - a); // 11 8 5 2 1
 
 <br />
 
+## 문자열
+
+- `.substr(idx, length)`
+
+- `slice( idx1[, idx2] )`
+
+  :: [idx1 :] 혹은 [idx1 : idx2 - 1] 의 원소들로 구성된 새 배열을 리턴한다
+
+- `splice( idx1[, idx2] )`
+
+  :: [idx1:] 혹은 [idx1 : idx2]의 원소들을 삭제하고,
+  [idx1 : idx2] 의 원소들로 구성된 배열을 리턴한다
+
+<br />
+
 ## 다차원 배열 선언
 
 ```javascript
@@ -121,3 +138,13 @@ for (let i = 0; i < 21; i++) {
 #### Set ::
 
 - 존재유무 및 중복 제거를 확인하는 일이 잦을 때
+
+## 정규표현식
+
+- 특정문자 제거 : `str.replace(/\{문자}/g,'')`;
+
+- [a-z] : a ~ z 사이의 문자를 찾음
+
+  [abc] : a, b, c중 하나를 찾음
+
+  [^abc] : a, b, c를 제외한 문자를 찾음
