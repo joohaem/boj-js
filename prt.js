@@ -2,45 +2,50 @@
 
 const fs = require("fs");
 const filePath = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
-// const [N, ...inputs] = fs.readFileSync(filePath).toString().trim().split("\n");
-const s = fs.readFileSync(filePath).toString().trim().replace(/\"/g, "");
+const inputs = fs.readFileSync(filePath).toString().trim().split("\n");
+// const s = fs.readFileSync(filePath).toString().trim().replace(/\[]/g, "");
 
 // -----------------------------------
 
-function solution(s) {
-  let answer = s.length;
+let result = [];
 
-  for (let i = 1; i <= parseInt(s.length / 2); i++) {
-    let str = "";
-    let cnt = 1;
-    let tempStr = s.substr(0, i);
+const idNIsEnter = [];
+const idNName = {};
 
-    for (let idx = i; idx <= s.length; idx += i) {
-      let nextStr = s.substr(idx, i);
-
-      console.log(idx, tempStr, nextStr);
-      if (tempStr === nextStr) {
-        cnt += 1;
-      } else {
-        if (cnt === 1) {
-          str = str + tempStr;
-        } else {
-          str = str + cnt + tempStr;
-        }
-
-        cnt = 1;
-        tempStr = nextStr;
-      }
-    }
-    if (cnt === 1) {
-      str = str + tempStr;
-    } else {
-      str = str + cnt + tempStr;
-    }
-    answer = Math.min(answer, str.length);
+function processStr(name, isEnter) {
+  if (isEnter) {
+    return `${name}님이 들어왔습니다.`;
+  } else {
+    return `${name}님이 나갔습니다.`;
   }
-
-  return answer;
 }
 
-solution(s);
+// -----------------------------------
+
+const records = inputs[0]
+  .slice(1, -1)
+  .split(", ")
+  .map((str) => str.slice(1, -1));
+
+records.forEach((record) => {
+  const [DO, ID, NAME] = record.split(" ");
+
+  let idx = 0;
+  switch (DO) {
+    case "Enter":
+      idNIsEnter.push({ id: ID, isEnter: true });
+      idNName[ID] = NAME;
+      break;
+    case "Change":
+      idNName[ID] = NAME;
+      break;
+    default:
+      idNIsEnter.push({ id: ID, isEnter: false });
+  }
+});
+
+idNIsEnter.forEach((el) => {
+  result.push(processStr(idNName[el.id], el.isEnter));
+});
+
+console.log(result);
