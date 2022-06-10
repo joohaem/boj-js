@@ -2,50 +2,36 @@
 
 const fs = require("fs");
 const filePath = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
-const inputs = fs.readFileSync(filePath).toString().trim().split("\n");
+const [w, h] = fs
+  .readFileSync(filePath)
+  .toString()
+  .trim()
+  .split(", ")
+  .map(Number);
 // const s = fs.readFileSync(filePath).toString().trim().replace(/\[]/g, "");
 
 // -----------------------------------
 
-let result = [];
-
-const idNIsEnter = [];
-const idNName = {};
-
-function processStr(name, isEnter) {
-  if (isEnter) {
-    return `${name}님이 들어왔습니다.`;
-  } else {
-    return `${name}님이 나갔습니다.`;
-  }
+function GCD(num1, num2) {
+  const gcd = (a, b) => (a % b === 0 ? b : gcd(b, a % b));
+  const lcm = (a, b) => (a * b) / gcd(a, b);
+  return gcd(num1, num2);
 }
 
 // -----------------------------------
 
-const records = inputs[0]
-  .slice(1, -1)
-  .split(", ")
-  .map((str) => str.slice(1, -1));
+const gcd = GCD(w, h);
+// 한 세트
+const _w = w / gcd;
+const _h = h / gcd;
+const ratio = _h / _w;
 
-records.forEach((record) => {
-  const [DO, ID, NAME] = record.split(" ");
+let minusCntOnOneSet = 0;
+for (let i = 1; i <= _w; i++) {
+  const min = Math.floor(ratio * (i - 1));
+  const max = Math.ceil(ratio * i);
 
-  let idx = 0;
-  switch (DO) {
-    case "Enter":
-      idNIsEnter.push({ id: ID, isEnter: true });
-      idNName[ID] = NAME;
-      break;
-    case "Change":
-      idNName[ID] = NAME;
-      break;
-    default:
-      idNIsEnter.push({ id: ID, isEnter: false });
-  }
-});
+  minusCntOnOneSet += max - min;
+}
 
-idNIsEnter.forEach((el) => {
-  result.push(processStr(idNName[el.id], el.isEnter));
-});
-
-console.log(result);
+console.log(w * h - gcd * minusCntOnOneSet);
