@@ -148,3 +148,8 @@ for (let i = 0; i < 21; i++) {
   [abc] : a, b, c중 하나를 찾음
 
   [^abc] : a, b, c를 제외한 문자를 찾음
+
+## n진법 변환
+
+- 10 -> n : `{value}.toString(n)`
+- n -> 10 : `Number.parseInt({value}, n)`

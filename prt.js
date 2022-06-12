@@ -2,36 +2,31 @@
 
 const fs = require("fs");
 const filePath = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
-const [w, h] = fs
-  .readFileSync(filePath)
-  .toString()
-  .trim()
-  .split(", ")
-  .map(Number);
+// const n = fs.readFileSync(filePath).toString().trim().split(" ").map(Number);
 // const s = fs.readFileSync(filePath).toString().trim().replace(/\[]/g, "");
 
 // -----------------------------------
 
-function GCD(num1, num2) {
-  const gcd = (a, b) => (a % b === 0 ? b : gcd(b, a % b));
-  const lcm = (a, b) => (a * b) / gcd(a, b);
-  return gcd(num1, num2);
+let n = 10;
+
+let answer = "";
+
+const restObj = {
+  1: 1,
+  2: 2,
+  0: 4,
+};
+
+const restArr = [];
+
+while (n > 0) {
+  restArr.push(n % 3);
+  n = n % 3 === 0 ? Math.floor(n / 3 - 1) : Math.floor(n / 3);
 }
+
+console.log(restArr);
 
 // -----------------------------------
 
-const gcd = GCD(w, h);
-// 한 세트
-const _w = w / gcd;
-const _h = h / gcd;
-const ratio = _h / _w;
-
-let minusCntOnOneSet = 0;
-for (let i = 1; i <= _w; i++) {
-  const min = Math.floor(ratio * (i - 1));
-  const max = Math.ceil(ratio * i);
-
-  minusCntOnOneSet += max - min;
-}
-
-console.log(w * h - gcd * minusCntOnOneSet);
+for (let i = restArr.length - 1; i >= 0; i--) answer += restObj[restArr[i]];
+console.log(`answer: `, answer);
