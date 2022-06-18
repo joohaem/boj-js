@@ -153,3 +153,11 @@ for (let i = 0; i < 21; i++) {
 
 - 10 -> n : `{value}.toString(n)`
 - n -> 10 : `Number.parseInt({value}, n)`
+
+## Tip.
+
+- "짝 짓기" --> `stack`
+
+- "최소 거리" --> `BFS`
+
+- "경로" --> `DFS`
