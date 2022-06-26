@@ -5,46 +5,80 @@ const filePath = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
 // const n = fs.readFileSync(filePath).toString().trim().split(" ").map(Number);
 // const s = fs.readFileSync(filePath).toString().trim().replace(/\[]/g, "");
 
-const orders = ["XYZ", "XWY", "WXA"];
-const course = [2, 3, 4];
-const result = [];
-
 // -----------------------------------
 
-function combination(arr, selectNum) {
-  const _result = [];
+function getCustomStr(w) {
+  let resultStr = "";
 
-  if (selectNum === 1) return arr.map((v) => [v]);
+  if (w === "") return "";
 
-  arr.forEach((v, idx, arr) => {
-    const rest = arr.slice(idx + 1);
-    const combinations = combination(rest, selectNum - 1);
-    const attach = combinations.map((combination) => [v, ...combination]);
+  const u = w.slice(0, getIdxBalance(w) + 1);
+  const v = w.slice(getIdxBalance(w) + 1);
 
-    _result.push(...attach);
-  });
+  if (checkCorrect(u)) {
+    resultStr += u + getCustomStr(v);
+  } else {
+    resultStr = `(${getCustomStr(v)})${getReverseU(u)}`;
+  }
 
-  return _result;
+  return resultStr;
+}
+
+function getIdxBalance(w) {
+  let idx = 0;
+  let openBlockCnt = 0;
+  let closeBlockCnt = 0;
+
+  for (let block of w) {
+    if (block === "(") {
+      openBlockCnt++;
+    } else {
+      closeBlockCnt++;
+    }
+
+    if (openBlockCnt === closeBlockCnt) return idx;
+    idx++;
+  }
+
+  return idx;
+}
+
+function checkCorrect(u) {
+  const stack = [];
+  let top = -1;
+
+  for (let block of u) {
+    if (stack[top] === "(" && block === ")") {
+      top--;
+    } else {
+      stack[++top] = block;
+    }
+
+    if (top === -1) return true;
+  }
+
+  return false;
+}
+
+function getReverseU(u) {
+  const _u = u.slice(1, u.length - 1);
+  let returnStr = "";
+
+  for (let block of _u) {
+    if (block === "(") returnStr += ")";
+    else returnStr += "(";
+  }
+
+  return returnStr;
 }
 
 // -----------------------------------
 
-course.forEach((num) => {
-  const resultMap = new Map();
+function solution(_p) {
+  const p = "()))((()";
+  const answer = getCustomStr(p);
 
-  orders.forEach((order) => {
-    combination(order.split(""), num).forEach((com) => {
-      const _key = (com.sort() + "").replace(/\,/g, "");
+  console.log(answer);
+}
 
-      if (resultMap.has(_key)) resultMap.set(_key, resultMap.get(_key) + 1);
-      else resultMap.set(_key, 1);
-    });
-  });
-
-  const MAX = Math.max(...resultMap.values());
-  resultMap.forEach((value, key) => {
-    if (value === MAX && value > 1) result.push(key);
-  });
-});
-
-console.log(result.sort());
+solution();
