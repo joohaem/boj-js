@@ -1,5 +1,6 @@
 "use strict";
 
+const { FORMERR } = require("dns");
 const fs = require("fs");
 const filePath = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
 // const n = fs.readFileSync(filePath).toString().trim().split(" ").map(Number);
@@ -7,78 +8,53 @@ const filePath = process.platform === "linux" ? "/dev/stdin" : "./input.txt";
 
 // -----------------------------------
 
-function getCustomStr(w) {
-  let resultStr = "";
-
-  if (w === "") return "";
-
-  const u = w.slice(0, getIdxBalance(w) + 1);
-  const v = w.slice(getIdxBalance(w) + 1);
-
-  if (checkCorrect(u)) {
-    resultStr += u + getCustomStr(v);
-  } else {
-    resultStr = `(${getCustomStr(v)})${getReverseU(u)}`;
-  }
-
-  return resultStr;
-}
-
-function getIdxBalance(w) {
-  let idx = 0;
-  let openBlockCnt = 0;
-  let closeBlockCnt = 0;
-
-  for (let block of w) {
-    if (block === "(") {
-      openBlockCnt++;
-    } else {
-      closeBlockCnt++;
-    }
-
-    if (openBlockCnt === closeBlockCnt) return idx;
-    idx++;
-  }
-
-  return idx;
-}
-
-function checkCorrect(u) {
-  const stack = [];
-  let top = -1;
-
-  for (let block of u) {
-    if (stack[top] === "(" && block === ")") {
-      top--;
-    } else {
-      stack[++top] = block;
-    }
-
-    if (top === -1) return true;
-  }
-
-  return false;
-}
-
-function getReverseU(u) {
-  const _u = u.slice(1, u.length - 1);
-  let returnStr = "";
-
-  for (let block of _u) {
-    if (block === "(") returnStr += ")";
-    else returnStr += "(";
-  }
-
-  return returnStr;
-}
-
 // -----------------------------------
 
-function solution(_p) {
-  const p = "()))((()";
-  const answer = getCustomStr(p);
+function solution() {
+  const arr1 = [..."E=M*C^2".toLowerCase()];
+  const arr2 = [..."e=m*c^2".toLowerCase()];
 
-  console.log(answer);
+  const map1 = new Map();
+  for (let i = 0; i < arr1.length - 1; i++) {
+    const target = arr1[i] + arr1[i + 1];
+
+    if (/^[a-z]+$/.test(target))
+      map1.set(target, map1.has(target) ? map1.get(target) + 1 : 1);
+  }
+  const map2 = new Map();
+  for (let i = 0; i < arr2.length - 1; i++) {
+    const target = arr2[i] + arr2[i + 1];
+
+    if (/^[a-z]+$/.test(target))
+      map2.set(target, map2.has(target) ? map2.get(target) + 1 : 1);
+  }
+
+  const intersectionMap = new Map();
+  const unionMap = new Map([...map1]);
+  for (let str of map1.keys()) {
+    if (map2.has(str))
+      intersectionMap.set(str, Math.min(map1.get(str), map2.get(str)));
+  }
+  for (let str of map2.keys()) {
+    unionMap.set(
+      str,
+      unionMap.has(str)
+        ? Math.max(unionMap.get(str), map2.get(str))
+        : map2.get(str)
+    );
+  }
+
+  let intersectionLength = 0;
+  [...intersectionMap.values()].forEach(
+    (value) => (intersectionLength += value)
+  );
+  let unionLength = 0;
+  [...unionMap.values()].forEach((value) => (unionLength += value));
+
+  if (unionLength === 0) return 65536;
+
+  var answer = Math.floor((intersectionLength / unionLength) * 65536);
+  return answer;
 }
 
-solution();
+console.log(solution());
